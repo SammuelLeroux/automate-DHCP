@@ -1,5 +1,3 @@
-# roles/pf/tasks/main.yml
-
 - name: Copy PF configuration file
   template:
     src: pf.conf.j2

@@ -5,3 +5,11 @@
     - common
     - pf
     - restart_network
+
+  handlers:
+    - name: Reload PF
+      command: pfctl -f /etc/pf.conf
+      notify: Enable PF
+
+    - name: Enable PF
+      command: pfctl -e

@@ -69,12 +69,3 @@
     name: dhcpd
     state: started
     enabled: yes
-
-handlers:
-  - name: Restart DHCP Service
-    service:
-      name: dhcpd
-      state: restarted
-
-  - name: Reload sysctl settings
-  command: sysctl -w net.inet.ip.forwarding=1

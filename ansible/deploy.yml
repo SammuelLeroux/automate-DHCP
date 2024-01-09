@@ -4,3 +4,12 @@
   roles:
     - common
     - restart_network
+  
+  handlers:
+  - name: Restart DHCP Service
+    service:
+      name: dhcpd
+      state: restarted
+
+  - name: Reload sysctl settings
+  command: sysctl -w net.inet.ip.forwarding=1

@@ -1,12 +1,19 @@
-ext_if="em0"
+block return
+pass
 
-int_if_admin="em1"
-int_if_server="em2"
-int_if_employee="em3"
+block return in on ! lo0 proto tcp to port 6000:6010
 
-network_admin="192.168.42.0/26"
-network_server="192.168.42.64/26"
-network_employee="192.168.42.128/26"
+block return out log proto {tcp udp} user _pbuild
+
+ext_if = "em0"
+
+int_if_admin = "em1"
+int_if_server = "em2"
+int_if_employee = "em3"
+
+network_admin = "192.168.42.0/26"
+network_server = "192.168.42.64/26"
+network_employee = "192.168.42.128/26"
 
 set block-policy drop
 set loginterface $ext_if

@@ -14,10 +14,26 @@
     src: "hostname.em3.j2"
     dest: "/etc/hostname.em3"
 
+- name: Create DHCP configuration file for em1
+  template:
+    src: dhcpd.conf.em1.j2
+    dest: /etc/dhcpd.conf.em1
+
+- name: Create DHCP configuration file for em2
+  template:
+    src: dhcpd.conf.em2.j2
+    dest: /etc/dhcpd.conf.em2
+
+- name: Create DHCP configuration file for em3
+  template:
+    src: dhcpd.conf.em3.j2
+    dest: /etc/dhcpd.conf.em3
+
 - name: Copy /etc/dhcpd.conf
   copy:
     src: "dhcpd.conf"
     dest: "/etc/dhcpd.conf"
+  notify: Restart DHCP Service
 
 - name: Copy /etc/rc.conf.local
   template:
@@ -32,7 +48,6 @@
   template:
     src: pf.conf.j2
     dest: /etc/pf.conf
-  notify: Reload PF
 
 - name: Ensure PF syntax is OK
   command: pfctl -nf /etc/pf.conf
@@ -52,3 +67,9 @@
     name: dhcpd
     state: started
     enabled: yes
+
+handlers:
+  - name: Restart DHCP Service
+    service:
+      name: dhcpd
+      state: restarted

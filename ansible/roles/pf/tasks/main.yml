@@ -1,0 +1,22 @@
+# roles/pf/tasks/main.yml
+
+- name: Copy PF configuration file
+  template:
+    src: pf.conf.j2
+    dest: /etc/pf.conf
+  notify: Reload PF
+
+- name: Ensure PF syntax is OK
+  command: pfctl -nf /etc/pf.conf
+  register: pf_syntax_check
+  changed_when: false
+
+- name: Reload PF
+  command: pfctl -f /etc/pf.conf
+  notify: Enable PF
+
+- name: Enable PF
+  command: pfctl -e
+  when: pf_syntax_check.stdout.find("syntax OK") != -1
+
+- include_tasks: sysctl.yml

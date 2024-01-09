@@ -1,0 +1,9 @@
+- name: Add IP forwarding configuration to sysctl.conf
+  lineinfile:
+    path: /etc/sysctl.conf
+    line: 'net.inet.ip.forwarding=1'
+  notify: Apply sysctl settings
+
+- name: Apply sysctl settings
+  command: sysctl -w net.inet.ip.forwarding=1
+  become: yes

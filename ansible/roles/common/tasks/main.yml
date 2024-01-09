@@ -23,8 +23,3 @@
   template:
     src: "rc.conf.local.j2"
     dest: "/etc/rc.conf.local"
-
-- name: Copy /etc/pf.conf
-  template:
-    src: "pf.conf.j2"
-    dest: "/etc/pf.conf"

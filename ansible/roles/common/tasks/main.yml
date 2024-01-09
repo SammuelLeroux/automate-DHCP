@@ -24,14 +24,8 @@
     src: "rc.conf.local.j2"
     dest: "/etc/rc.conf.local"
 
-- name: Add IP forwarding configuration to sysctl.conf
-  lineinfile:
-    path: /etc/sysctl.conf
-    line: 'net.inet.ip.forwarding=1'
-  notify: Reload PF
-
-- name: Apply sysctl settings
-  command: sysctl -w net.inet.ip.forwarding=1
+- name: Enable IP forwarding
+  command: sysctl net.inet.ip.forwarding=1
   become: yes
 
 - name: Copy PF configuration file

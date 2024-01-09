@@ -23,3 +23,38 @@
   template:
     src: "rc.conf.local.j2"
     dest: "/etc/rc.conf.local"
+
+- name: Add IP forwarding configuration to sysctl.conf
+  lineinfile:
+    path: /etc/sysctl.conf
+    line: 'net.inet.ip.forwarding=1'
+  notify: Reload PF
+
+- name: Apply sysctl settings
+  command: sysctl -w net.inet.ip.forwarding=1
+  become: yes
+
+- name: Copy PF configuration file
+  template:
+    src: pf.conf.j2
+    dest: /etc/pf.conf
+  notify: Reload PF
+
+- name: Ensure PF syntax is OK
+  command: pfctl -nf /etc/pf.conf
+  register: pf_syntax_check
+  changed_when: false
+
+- name: Reload PF
+  command: pfctl -f /etc/pf.conf
+  when: pf_syntax_check.stdout.find("syntax OK") != -1
+
+- name: Enable PF
+  command: pfctl -e
+  when: pf_syntax_check.stdout.find("syntax OK") != -1
+
+- name: Enable DHCP service
+  service:
+    name: dhcpd
+    state: started
+    enabled: yes

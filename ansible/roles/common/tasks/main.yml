@@ -40,9 +40,11 @@
     src: "rc.conf.local.j2"
     dest: "/etc/rc.conf.local"
 
-- name: Enable IP forwarding
-  command: sysctl net.inet.ip.forwarding=1
-  become: yes
+- name: Enable IP forwarding on OpenBSD
+  lineinfile:
+    path: /etc/sysctl.conf.local
+    line: 'net.inet.ip.forwarding=1'
+  notify: Reload sysctl settings
 
 - name: Copy PF configuration file
   template:
@@ -73,3 +75,6 @@ handlers:
     service:
       name: dhcpd
       state: restarted
+
+  - name: Reload sysctl settings
+  command: sysctl -w net.inet.ip.forwarding=1

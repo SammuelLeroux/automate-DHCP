@@ -40,6 +40,14 @@
     src: "rc.conf.local.j2"
     dest: "/etc/rc.conf.local"
 
+- name: Create /etc/sysctl.conf.local if not exists
+  copy:
+    content: 'net.inet.ip.forwarding=1\n'
+    dest: /etc/sysctl.conf.local
+    mode: '0644'
+  notify: Reload sysctl settings
+  when: not (lookup('file', '/etc/sysctl.conf.local') is exists and lookup('file', '/etc/sysctl.conf.local') is size > 0)
+
 - name: Enable IP forwarding on OpenBSD
   lineinfile:
     path: /etc/sysctl.conf.local

@@ -1,0 +1,18 @@
+ansible/
+|-- inventory.ini
+|-- roles
+|   |-- common
+|   |   |-- files
+|   |   |   `-- dhcpd.conf
+|   |   |-- tasks
+|   |   |   `-- main.yml
+|   |   `-- templates
+|   |       |-- hostname.em1.j2
+|   |       |-- hostname.em2.j2
+|   |       |-- hostname.em3.j2
+|   |       |-- pf.conf.j2
+|   |       `-- rc.conf.local.j2
+|   `-- restart_network
+|       `-- tasks
+|           `-- main.yml
+|-- deploy.yml

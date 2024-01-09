@@ -1,0 +1,33 @@
+ext_if="em0"
+int_if_admin="em1"
+int_if_server="em2"
+int_if_employee="em3"
+
+network_admin="192.168.42.0/26"
+network_server="192.168.42.64/26"
+network_employee="192.168.42.128/26"
+
+set block-policy drop
+set loginterface $ext_if
+
+set skip on lo
+
+pass out on $int_if_admin from $network_admin to any
+pass out on $int_if_server from $network_server to any
+pass out on $int_if_employee from $network_employee to any
+
+pass in on $int_if_admin proto udp from any to $int_if_admin port { 67, 68, 53 }
+pass in on $int_if_server proto udp from any to $int_if_server port { 67, 68, 53 }
+pass in on $int_if_employee proto udp from any to $int_if_employee port { 67, 68, 53 }
+
+pass in on $int_if_admin proto icmp from any to $int_if_admin
+pass in on $int_if_server proto icmp from any to $int_if_server
+pass in on $int_if_employee proto icmp from any to $int_if_employee
+
+pass in on $int_if_admin from $network_admin to { $network_server $network_employee }
+
+block in on $int_if_employee from $network_employee to $network_server
+
+pass out on $ext_if proto icmp from { $network_admin $network_server $network_employee } to any
+
+pass in on $ext_if proto icmp from any to { $network_admin $network_server $network_employee }

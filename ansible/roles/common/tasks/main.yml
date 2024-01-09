@@ -1,0 +1,30 @@
+---
+- name: Copy /etc/hostname.em1
+  template:
+    src: "hostname.em1.j2"
+    dest: "/etc/hostname.em1"
+
+- name: Copy /etc/hostname.em2
+  template:
+    src: "hostname.em2.j2"
+    dest: "/etc/hostname.em2"
+
+- name: Copy /etc/hostname.em3
+  template:
+    src: "hostname.em3.j2"
+    dest: "/etc/hostname.em3"
+
+- name: Copy /etc/dhcpd.conf
+  copy:
+    src: "dhcpd.conf"
+    dest: "/etc/dhcpd.conf"
+
+- name: Copy /etc/rc.conf.local
+  template:
+    src: "rc.conf.local.j2"
+    dest: "/etc/rc.conf.local"
+
+- name: Copy /etc/pf.conf
+  template:
+    src: "pf.conf.j2"
+    dest: "/etc/pf.conf"

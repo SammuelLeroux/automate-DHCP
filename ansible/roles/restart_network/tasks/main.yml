@@ -1,0 +1,3 @@
+---
+- name: Restart network services
+  command: sh /etc/netstart
